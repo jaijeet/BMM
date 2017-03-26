@@ -1,0 +1,30 @@
+//======================================================================
+// hys_template_DC_AC_TRAN.scs
+//======================================================================
+// Spectre netlist to test the hys_template compact model (hys_template.va)
+//
+// Version: 1.0.0
+// Tested on: Cadence Spectre version 7.2.0 64bit
+//                        and version 15.1.0 64bit
+//
+// Author: Tianshi Wang [tianshi@berkeley.edu]
+// Last Modified: Mar 25, 2017
+
+simulator lang=spectre
+
+ahdl_include "../models/hys_template.va"
+
+saveOptions options save=all
+
+V1 (1 0) vsource dc=1 type=sine sinedc=0 ampl=0.7 freq=1k
+X1 (1 0) hys_template
+
+// DC analysis
+dc1 dc dev=V1 start=-1 stop=1 lin=100 
+dc2 dc dev=V1 start=1 stop=-1 lin=100 
+
+// AC analysis
+ac ac start=10 stop=10k dec=20
+
+// transient simulation
+tran tran stop=2m 

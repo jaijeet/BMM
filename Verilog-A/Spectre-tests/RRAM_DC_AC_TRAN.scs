@@ -1,0 +1,29 @@
+//======================================================================
+// RRAM_DC_AC_TRAN.scs
+//======================================================================
+// Spectre netlist to test the RRAM compact model (RRAM.va)
+//
+// Version: 1.0.0
+// Tested on: Cadence Spectre version 7.2.0 64bit
+//                        and version 15.1.0 64bit
+//
+// Author: Tianshi Wang [tianshi@berkeley.edu]
+// Last Modified: Mar 25, 2017
+
+simulator lang=spectre
+
+ahdl_include "../models/RRAM.va"
+
+saveOptions options save=all
+
+Vin (in 0) vsource dc=1 mag=1 type=pulse val0=-1 val1=1 delay=1u rise=4m fall=4m width=1u period=8m+2u
+X1 (in 0) RRAM
+
+// DC analysis
+dc dc dev=Vin start=-1 stop=1 lin=100 
+
+// AC analysis
+ac ac start=100 stop=1G dec=20
+
+// transient simulation
+tran tran stop=8m 
